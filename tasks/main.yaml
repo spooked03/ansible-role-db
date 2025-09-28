@@ -3,33 +3,32 @@
   apt:
     name:
       - mariadb-server
-      - mariadb-client
       - python3-pymysql
     state: present
-  become: yes
 
-- name: Start and enable MariaDB service
-  systemd:
+- name: Ensure mariadb service is enabled and started
+  ansible.builtin.service:
     name: mariadb
     state: started
-    enabled: yes
-  become: yes
-  notify: restart mariadb
+    enabled: true
 
-- name: Set MariaDB root password
-  mysql_user:
-    name: root
-    password: "{{ db_root_password }}"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
+- name: Wait for MariaDB socket to appear
+  ansible.builtin.wait_for:
+    path: "{{ mysql_socket }}"
+    state: started
+    timeout: 60
+
+- name: Create database user (connect via unix socket as root)
+  ansible.builtin.mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: '*.*:ALL'
+    host: localhost
     state: present
-  become: yes
+    login_unix_socket: "{{ mysql_socket }}"
 
-- name: Create database
-  mysql_db:
+- name: Create the database (connect via unix socket as root)
+  ansible.builtin.mysql_db:
     name: "{{ db_name }}"
     state: present
-    login_user: "root"
-    login_password: "{{ db_root_password }}"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-  become: yes
-  notify: restart mariadb
+    login_unix_socket: "{{ mysql_socket }}"

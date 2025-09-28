@@ -1,4 +1,6 @@
 ---
 # MariaDB configuration defaults
-db_root_password: root
-db_name: testdb
+db_name: mydb
+db_user: admin
+db_password: admin
+mysql_socket: /var/run/mysqld/mysqld.sock
