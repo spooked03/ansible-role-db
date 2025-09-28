@@ -1,9 +1,10 @@
 galaxy_info:
+  role_name: ansible-role-db
   author: spooked03
   description: Database role for managing database installations and configurations
   company: 
-  license:
-  min_ansible_version: 2.9
+  license: gplv3
+  min_ansible_version: 2.12
   platforms:
     - name: Ubuntu
       versions:
