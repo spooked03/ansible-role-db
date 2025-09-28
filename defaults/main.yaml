@@ -1,7 +1,4 @@
 ---
 # MariaDB configuration defaults
-mariadb_root_password: "root"
-db_user: "root"
-db_password: "root"
-db_host: "localhost"
-db_name: "root"  # Add this missing variable
+db_root_password: root
+db_name: testdb
